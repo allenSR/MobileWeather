@@ -1,5 +1,5 @@
-import React, {useState, Component, timestamp, map} from 'react';
-import {StyleSheet, Text, View, Button, Alert} from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import {Header} from './src/Header';
 import {Forma} from './src/Form';
 import {Weather} from './src/Weather';
@@ -7,29 +7,29 @@ import {Weather} from './src/Weather';
 const API_KEY = '7e21ab7410d3d01775c3a23e1eb536a2';
 const CityName = 'Krasnoyarsk';
 
-
-
 class App extends Component {
-  constructor(props) {
-      super()
-      
-      this.state = {}
-      this.handleClick = this.handleClick;
+  state = {};
+
+  update = () => {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?&lang=ru&q=${CityName}&appid=${API_KEY}&units=metric`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          name: data.name,
+          temp: data.main.temp,
+          wind: data.wind.speed,
+          description: data.weather[0].description,
+          feels_like: data.main.feels_like,
+          humidity: data.main.humidity,
+          sunset:data.sys.sunset,
+          
+        },  
+          console.log(data))
+      })   
   }
 
   componentDidMount() {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?&lang=ru&q=${CityName}&appid=${API_KEY}&units=metric`)
-          .then(response => response.json())
-          .then(data => {
-              this.setState({
-                  name: data.name,
-                  temp: data.main.temp,
-                  wind: data.wind.speed,
-                  description: data.weather[0].description,
-                  feels_like: data.main.feels_like
-              },
-              console.log(data))     
-          });
+    this.update();
   }
   
   render() {
@@ -44,9 +44,11 @@ class App extends Component {
           wind = {this.state.wind}
           description = {this.state.description}
           feels_like = {this.state. feels_like}
+          humidity = {this.state.humidity}
+          sunset_date = {this.state.sunset_date}
           >
           </Weather>  
-          <Forma /> 
+          <Forma update={this.update} />
         </View>
       ) 
   }

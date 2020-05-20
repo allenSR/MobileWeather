@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     text: {
-
         color: '#fff',
         fontSize: 22
     }
